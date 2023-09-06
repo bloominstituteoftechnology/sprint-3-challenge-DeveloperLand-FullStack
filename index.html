@@ -58,7 +58,48 @@
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
+        class Integers {
+  constructor(...args) {
+    this.ints = args;
+  }
 
+  getAll() {
+    return this.ints;
+  }
+
+  getEvens() {
+    return this.ints.filter((num) => num % 2 === 0);
+  }
+
+  getNegatives() {
+    return this.ints.filter((num) => num < 0);
+  }
+
+  getAllSquared() {
+    return this.ints.map((num) => num * num);
+  }
+
+  pop() {
+    if (this.ints.length > 0) {
+      return this.ints.pop();
+    } else {
+      return undefined; // Return undefined when attempting to pop from an empty array
+    }
+  }
+
+  push(n) {
+    this.ints.push(n);
+    return this.ints;
+  }
+
+  getEveryNth(n) {
+    return this.ints.filter((_, index) => index % n === 0);
+  }
+
+  getAllReversed() {
+    return this.ints.slice().reverse(); // Create a copy and reverse it to not modify the original array
+  }
+}
     }
 
     // 👉 CHALLENGE 2 NerfGun
@@ -76,7 +117,40 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
+      class NerfGun {
+  constructor(totalProjectiles) {
+    this.maxCapacity = totalProjectiles;
+    this.currentCapacity = totalProjectiles;
+    this.safetyOn = true;
+  }
 
+  shoot() {
+    if (this.currentCapacity > 0 && !this.safetyOn) {
+      this.currentCapacity--;
+      return "Bang!";
+    } else {
+      return "Click!";
+    }
+  }
+
+  reload(num) {
+    if (typeof num === 'number' && num > 0) {
+      this.currentCapacity = Math.min(this.currentCapacity + num, this.maxCapacity);
+      return `${this.currentCapacity} projectiles left!`;
+    } else {
+      return "Error reloading!";
+    }
+  }
+
+  toggleSafety() {
+    this.safetyOn = !this.safetyOn;
+    if (this.safetyOn) {
+      return "Safety enabled!";
+    } else {
+      return "Safety disabled!";
+    }
+  }
+}
     }
 
     // 👉 CHALLENGE 3 EBook
@@ -95,7 +169,26 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
+      class EBook {
+  constructor(text, charactersPerPage) {
+    this.text = text;
+    this.charactersPerPage = charactersPerPage;
+    this.currentPage = 0;
+  }
 
+  next() {
+    const startIndex = this.currentPage * this.charactersPerPage;
+    const endIndex = startIndex + this.charactersPerPage;
+
+    if (startIndex >= this.text.length) {
+      return null; // Reached the end of the book
+    }
+
+    const pageText = this.text.slice(startIndex, endIndex);
+    this.currentPage++;
+    return pageText;
+  }
+}
     }
 
     // 👉 CHALLENGE 4 AntFarm
@@ -130,7 +223,38 @@
       //      console.log(list) // prints ["a"]
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
+        class AntFarm {
+  constructor(...antNames) {
+    this.ants = antNames.map((name) => ({ name, health: 100 }));
+  }
 
+  work() {
+    if (this.ants.length === 0) {
+      return "No ants here. Did you work them to death?";
+    }
+
+    this.ants.forEach((ant) => {
+      ant.health -= 20;
+      if (ant.health <= 0) {
+        const index = this.ants.indexOf(ant);
+        this.ants.splice(index, 1); // Remove dead ants from the array
+      }
+    });
+
+    return `${this.ants.length} ants starting work!`;
+  }
+
+  feed(antName) {
+    const antToFeed = this.ants.find((ant) => ant.name === antName);
+
+    if (antToFeed) {
+      antToFeed.health += 15;
+      return "Yum!";
+    } else {
+      return `${antName} not found!`;
+    }
+  }
+}
     }
 
     // 🧪 TESTS, do not make any changes below this line ===================
